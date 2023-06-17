@@ -1,0 +1,6 @@
+#!/bin/sh
+export ANDROID_NO_USE_FWMARK_CLIENT=1
+fakeroot adb connect 127.0.0.1:$1
+fakeroot adb shell
+fakeroot adb kill-server
+exit

@@ -1,0 +1,12 @@
+#!/system/bin/sh
+packages=$(cmd package compile -a -m assume-verified --check-prof false | grep -E "^[0-9]+\/[0-9]+: " | grep -v "io.github.qauxv" | sed -E "s/^[0-9]+\/[0-9]+: //g")
+total=$(echo $packages | wc -w)
+current=0;
+for package in $packages; do
+  current=$((current+1))
+  echo $current/$total: $package
+  echo "\tMain:" $(cmd package compile -f -m everything --check-prof true $package 2>/dev/null)
+  echo "\tSecondary:" $(cmd package compile -f -m everything --check-prof true --secondary-dex $package 2>/dev/null)
+  echo "\tLayout:" $(cmd package compile -f --check-prof true --compile-layouts $package 2>/dev/null)
+done
+echo "Backgroud:" $(cmd package bg-dexopt-job 2>/dev/null)
