@@ -10,8 +10,7 @@ for package in $packages; do
     current=$((current+1))
     echo $current/$total: $package
     appTimeStamp=$(date -d "$(dumpsys package $package | grep lastUpdateTime | cut -d'=' -f2 | head -n 1)" "+%s")
-    echo $lastTimeStamp $appTimeStamp
-    if [ "$lastTimeStamp" -ge "$appTimeStamp" ]; then
+    if [ "$lastTimeStamp" -gt "$appTimeStamp" ]; then
         echo "\t Skip this app"
         continue
     fi
